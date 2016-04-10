@@ -14,14 +14,14 @@ def posts_detail(request): #retrieve
 	return render(request, 'index.html', context)
 
 def posts_list(request): #list items
-	if request.user.is_authenticated():
-		context = {
-			"title": "My User list"
-		}
-	else:
-		context = {
-			"title": "No page for you!"
-		}
+	# if request.user.is_authenticated():
+	# 	context = {
+	# 		"title": "My User list"
+	# 	}
+	# else:
+	# 	context = {
+	# 		"title": "No page for you!"
+	# 	}
 	return render(request, 'index.html', context)
 
 def posts_update(request):
