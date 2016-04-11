@@ -8,9 +8,9 @@ from .models import Post
 def posts_create(request):
 	return HttpResponse("<h1>Hello</h1>")  #must wrap function into a url
 
-def posts_detail(request): #retrieve
+def posts_detail(request, id=None): #retrieve
 	#instance = Post.objects.get(id=1)
-	instance = get_object_or_404(Post, id = 1)
+	instance = get_object_or_404(Post, id = 11)
 	context = {
 		"title": "detail",
 		"instance":instance
