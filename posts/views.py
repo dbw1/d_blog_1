@@ -8,11 +8,11 @@ from .models import Post
 def posts_create(request):
 	return HttpResponse("<h1>Hello</h1>")  #must wrap function into a url
 
-def posts_detail(request, id=None): #retrieve
+def posts_detail(request, id): #retrieve
 	#instance = Post.objects.get(id=1)
-	instance = get_object_or_404(Post, id = 11)
+	instance = get_object_or_404(Post, id = id)
 	context = {
-		"title": "detail",
+		"title": instance.title,
 		"instance":instance
 	}
 	return render(request, 'post_detail.html', context)
