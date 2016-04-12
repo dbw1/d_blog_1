@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.core.urlresolvers import reverse
 # Create your models here.
 
 class Post(models.Model):
@@ -12,6 +12,9 @@ class Post(models.Model):
 	def __str__(self):
 		return self.title
 
+	def get_absolute_url(self):
+		return reverse("detail", kwargs={"id": self.id})
+		#return "/posts/%s/" % (self.id)   #define url by function call to db model
 	# for python 2
 	#def __unicode__(self):
 	#	return self.title
