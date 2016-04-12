@@ -3,7 +3,10 @@
 <body>
 <h1>form</h1>
 
+<form method='POST' action=''>{% csrf_token %} <!-- each time you need to Post data, need this csrf, security token; ensures that the data is being sent from your site -->
 {{ form.as_p }}
+<input type ='submit' value = 'Create Post'/>
+</form>
 
 </body>
 </html>

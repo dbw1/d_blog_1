@@ -7,7 +7,16 @@ from .forms import PostForm
 
 #request comes in send a response
 def posts_create(request):
-	form = PostForm()
+	form = PostForm(request.POST or None) #checks for validation errors through Form function
+	if form.is_valid():   #saves the form data into database if valid
+		instance = form.save(commit=False)
+		instance.save()
+		
+	# Below commented method would print out title or content and then we could save
+	# to model db, however this doesn't validate data, so it is inferior to above Posts method used
+	# if request.method == 'POST':
+	# 	print (request.POST.get("content"))
+	# 	print (request.POST.get("title")
 	context = {
 		"form": form,
 	}
