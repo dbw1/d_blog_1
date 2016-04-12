@@ -11,7 +11,7 @@ def posts_create(request):
 	if form.is_valid():   #saves the form data into database if valid
 		instance = form.save(commit=False)
 		instance.save()
-		
+
 	# Below commented method would print out title or content and then we could save
 	# to model db, however this doesn't validate data, so it is inferior to above Posts method used
 	# if request.method == 'POST':
@@ -37,18 +37,21 @@ def posts_list(request): #list items
 		"object_list": queryset,  #add queryset to post list we can see
 		"title": "list"
 	}
-	# if request.user.is_authenticated():
-	# 	context = {
-	# 		"title": "My User list"
-	# 	}
-	# else:
-	# 	context = {
-	# 		"title": "No page for you!"
-	# 	}
 	return render(request, 'index.html', context)
 
-def posts_update(request):
-	return HttpResponse("<h1>update</h1>")
+def posts_update(request, id):
+	instance = get_object_or_404(Post, id = id)
+	form = PostForm(request.POST or None, instance=instance) #checks for validation redirects what you had
+	if form.is_valid():   #saves the form data into database if valid
+		instance = form.save(commit=False)
+		instance.save()
+	
+	context = {
+		"title": instance.title,
+		"instance":instance,
+		"form": form,
+	}
+	return render(request, 'post_form.html', context)
 
 def posts_delete(request):
 	return HttpResponse("<h1>delete</h1>")
