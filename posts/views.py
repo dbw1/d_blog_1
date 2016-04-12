@@ -1,5 +1,6 @@
+from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 
 from .models import Post
 from .forms import PostForm
@@ -11,8 +12,10 @@ def posts_create(request):
 	if form.is_valid():   #saves the form data into database if valid
 		instance = form.save(commit=False)
 		instance.save()
-		# need a success message here!
+		messages.success(request, "Post Successfully created")
 		return HttpResponseRedirect(instance.get_absolute_url())
+	else:
+		messages.error(request, "No Post Created")
 	# Below commented method would print out title or content and then we could save
 	# to model db, however this doesn't validate data, so it is inferior to above Posts method used
 	# if request.method == 'POST':
@@ -46,7 +49,7 @@ def posts_update(request, id):
 	if form.is_valid():   #saves the form data into database if valid
 		instance = form.save(commit=False)
 		instance.save()
-		# need a success message here!
+		messages.success(request, "Update Successful")
 		return HttpResponseRedirect(instance.get_absolute_url())
 	context = {
 		"title": instance.title,  #renders exiting id's title
@@ -55,5 +58,8 @@ def posts_update(request, id):
 	}
 	return render(request, 'post_form.html', context)
 
-def posts_delete(request):
-	return HttpResponse("<h1>delete</h1>")
+def posts_delete(request, id):
+	instance = get_object_or_404(Post, id = id)
+	instance.delete()
+	messages.success(request, "Succesfully deleted")
+	return redirect("posts:list")
