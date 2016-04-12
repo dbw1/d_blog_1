@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 
 from .models import Post
@@ -11,7 +11,8 @@ def posts_create(request):
 	if form.is_valid():   #saves the form data into database if valid
 		instance = form.save(commit=False)
 		instance.save()
-
+		# need a success message here!
+		return HttpResponseRedirect(instance.get_absolute_url())
 	# Below commented method would print out title or content and then we could save
 	# to model db, however this doesn't validate data, so it is inferior to above Posts method used
 	# if request.method == 'POST':
@@ -45,11 +46,12 @@ def posts_update(request, id):
 	if form.is_valid():   #saves the form data into database if valid
 		instance = form.save(commit=False)
 		instance.save()
-	
+		# need a success message here!
+		return HttpResponseRedirect(instance.get_absolute_url())
 	context = {
-		"title": instance.title,
-		"instance":instance,
-		"form": form,
+		"title": instance.title,  #renders exiting id's title
+		"instance":instance,      #renders exiting id's content
+		"form": form,             #renders actual form information
 	}
 	return render(request, 'post_form.html', context)
 
