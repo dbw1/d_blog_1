@@ -13,7 +13,9 @@ class Post(models.Model):
 		return self.title
 
 	def get_absolute_url(self):
-		return reverse("detail", kwargs={"id": self.id})
+		return reverse("posts:detail", kwargs={"id": self.id})
+		# reverse looks up name ="detail" from the urls.py page
+		# also fills in kew word argument id
 		#return "/posts/%s/" % (self.id)   #define url by function call to db model
 	# for python 2
 	#def __unicode__(self):
