@@ -2,11 +2,16 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 
 from .models import Post
+from .forms import PostForm
 # Create your views here.
 
 #request comes in send a response
 def posts_create(request):
-	return HttpResponse("<h1>Hello</h1>")  #must wrap function into a url
+	form = PostForm()
+	context = {
+		"form": form,
+	}
+	return render(request, 'post_form.html', context)
 
 def posts_detail(request, id): #retrieve
 	#instance = Post.objects.get(id=1)
