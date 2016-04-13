@@ -14,8 +14,7 @@ def posts_create(request):
 		instance.save()
 		messages.success(request, "Post Successfully created")
 		return HttpResponseRedirect(instance.get_absolute_url())
-	else:
-		messages.error(request, "No Post Created")
+	
 	# Below commented method would print out title or content and then we could save
 	# to model db, however this doesn't validate data, so it is inferior to above Posts method used
 	# if request.method == 'POST':
@@ -41,7 +40,7 @@ def posts_list(request): #list items
 		"object_list": queryset,  #add queryset to post list we can see
 		"title": "list"
 	}
-	return render(request, 'base.html', context)
+	return render(request, 'post_list.html', context)
 
 def posts_update(request, id):
 	instance = get_object_or_404(Post, id = id)
