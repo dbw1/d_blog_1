@@ -1,41 +1,20 @@
 <!--DOCTYPE html -->
 <html>
-<body>
 <head>
 
 <title>{%block head_title%}Just Another Blog{%endblock head_title%}</title>
+<style>
+{% block style %}
+{% endblock style %}
+</style>
 </head>
-{% if messages %}
-	<div class="messages">
 
-		<ul class="messages">
-		    {% for message in messages %}
-		    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-		    {% endfor %}
-		</ul>
+<body>
 
-	</div>
-{% endif %}
-
+{% include "message_display.html" %}
 <div class='container'>
-	{% block content %}
-
-	<h1>template {{ title }} works</h1>
-
-	{% for obj in object_list %}
-	<!-- {% url "posts:detail" id=obj.id %} , objects are passed from model to rendering through views.py -->
-	<a href='{{ obj.get_absolute_url }}'>{{ obj.title }}</a><br/>  <!-- create a dynamic link to url, no matter what the url name
-	                                                                       {% <url_file> "<name>"}-->
-	{{ obj.content }}<br/>
-	{{ obj.timestamp }}<br/>
-	{{ obj.updated }}<br/>
-	{{ obj.id }}<br/>
-
-	{% endfor %}
-
-
-
-	{% endblock content %}
+{% block content %}
+{% endblock content %}
 </div>
 
 
