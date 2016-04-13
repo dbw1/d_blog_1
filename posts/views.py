@@ -41,7 +41,7 @@ def posts_list(request): #list items
 		"object_list": queryset,  #add queryset to post list we can see
 		"title": "list"
 	}
-	return render(request, 'index.html', context)
+	return render(request, 'base.html', context)
 
 def posts_update(request, id):
 	instance = get_object_or_404(Post, id = id)
