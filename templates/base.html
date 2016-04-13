@@ -1,8 +1,10 @@
+{% load staticfiles %}
 <!--DOCTYPE html -->
 <html>
 <head>
 
 <title>{%block head_title%}Just Another Blog{%endblock head_title%}</title>
+<link rel='stylesheet' href='{% static "css/base.css" %}'/>   <!-- relative import from dir listed in manage.py-->
 <style>
 {% block style %}
 {% endblock style %}
