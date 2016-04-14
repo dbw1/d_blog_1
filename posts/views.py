@@ -9,7 +9,7 @@ from .forms import PostForm
 
 #request comes in send a response
 def posts_create(request):
-	form = PostForm(request.POST or None) #checks for validation errors through Form function
+	form = PostForm(request.POST or None, request.FILES or None) #POST request text field data, FILES requests files
 	if form.is_valid():   #saves the form data into database if valid
 		instance = form.save(commit=False)
 		instance.save()
@@ -63,7 +63,7 @@ def posts_list(request): #list items
 
 def posts_update(request, id):
 	instance = get_object_or_404(Post, id = id)
-	form = PostForm(request.POST or None, instance=instance) #checks for validation redirects what you had
+	form = PostForm(request.POST or None, request.FILES or None, instance=instance) #checks for validation redirects what you had
 	if form.is_valid():   #saves the form data into database if valid
 		instance = form.save(commit=False)
 		instance.save()
