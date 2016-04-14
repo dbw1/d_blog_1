@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 
@@ -35,12 +36,30 @@ def posts_detail(request, id): #retrieve
 	return render(request, 'post_detail.html', context)
 
 def posts_list(request): #list items
-	queryset = Post.objects.all() #.order_by("-timestamp")
+	queryset_list = Post.objects.all() #all queries
+	queries_per_page_var = 5
+	paginator = Paginator(queryset_list, queries_per_page_var) # Show 25 contacts per page
+	page_request_var = 'page' #change page search name (see post_list.html)
+	page = request.GET.get(page_request_var)
+	try:
+	    queryset = paginator.page(page) #queries in a given paginator set
+	except PageNotAnInteger:
+	    # If page is not an integer, deliver first page.
+	    queryset = paginator.page(1)
+	except EmptyPage:
+	    # If page is out of range (e.g. 9999), deliver last page of results.
+	    queryset = paginator.page(paginator.num_pages)
+
 	context = {
 		"object_list": queryset,  #add queryset to post list we can see
-		"title": "List"
+		"title": "List",
+		"page_request_var": page_request_var
 	}
+
 	return render(request, 'post_list.html', context)
+
+
+
 
 def posts_update(request, id):
 	instance = get_object_or_404(Post, id = id)
