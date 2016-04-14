@@ -2,8 +2,13 @@ from django.db import models
 from django.core.urlresolvers import reverse
 # Create your models here.
 
+#to save model changes
+#python manage.py makemigrations <--like git add
+#python manage.py migrate  <- like git commit
+
 class Post(models.Model):
 	title = models.CharField(max_length=120)  #max_length = 120
+	image = models.FileField(null=True, blank=True)
 	content = models.TextField()
 	timestamp = models.DateTimeField(auto_now=False, auto_now_add=True) #1st time made initially
 	updated = models.DateTimeField(auto_now=True, auto_now_add=False) #everytime it's updated
@@ -21,5 +26,6 @@ class Post(models.Model):
 	#def __unicode__(self):
 	#	return self.title
 	class Meta: #describes model, handles anything not a field
-	
+
 		ordering = ["-timestamp", "-updated"]
+		           #order by any piece of the model
