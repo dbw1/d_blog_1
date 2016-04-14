@@ -67,7 +67,7 @@ def posts_update(request, id):
 	if form.is_valid():   #saves the form data into database if valid
 		instance = form.save(commit=False)
 		instance.save()
-		messages.success(request, "Update Successful")
+		messages.success(request, "<a href='#'>Item</a> Saved", extra_tags='html_safe')
 		return HttpResponseRedirect(instance.get_absolute_url())
 	context = {
 		"title": instance.title,  #renders existing id's title
