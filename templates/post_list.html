@@ -1,12 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1>{{ title }}</h1>
+<div class = 'col-sm-8 col-sm-offset-2'>
+	<h1> {{ title }} </h1>
 	<div class="row">
 	{% for obj in object_list %}
 	
 
-  		<div class="col-sm-4">
+  		<div class="col-sm-6">
     		<div class="thumbnail">
       		<!-- <img src="..." alt="..."> -->
       			<div class="caption">
@@ -21,8 +22,8 @@
   		</div>
 	
 
-  	{% cycle "" "" "</div><div class ='row'>" %}
+  	{% cycle "" "<div class='col-sm-12'></div></div><div class ='row'>" %}
 	{% endfor %}
 	</div>
-
+</div>
 {% endblock content %}
