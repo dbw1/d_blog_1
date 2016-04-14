@@ -6,5 +6,6 @@ class PostForm(forms.ModelForm):  #argument is a form object
 		model = Post
 		fields = [
 			"title",
-			"content"
+			"content",
+			"image"
 			]
