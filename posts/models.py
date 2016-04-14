@@ -20,3 +20,6 @@ class Post(models.Model):
 	# for python 2
 	#def __unicode__(self):
 	#	return self.title
+	class Meta: #describes model, handles anything not a field
+	
+		ordering = ["-timestamp", "-updated"]
