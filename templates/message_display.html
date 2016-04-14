@@ -1,5 +1,7 @@
 
 {% if messages %}
+	<div class = 'col-sm-6 col-sm-offset-1'>
+
 	<div class="messages">
 
 		<ul class="messages">
@@ -7,6 +9,6 @@
 		    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
 		    {% endfor %}
 		</ul>
-
+	</div>
 	</div>
 {% endif %}
