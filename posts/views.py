@@ -38,7 +38,7 @@ def posts_list(request): #list items
 	queryset = Post.objects.all()
 	context = {
 		"object_list": queryset,  #add queryset to post list we can see
-		"title": "list"
+		"title": "List"
 	}
 	return render(request, 'post_list.html', context)
 
@@ -51,8 +51,8 @@ def posts_update(request, id):
 		messages.success(request, "Update Successful")
 		return HttpResponseRedirect(instance.get_absolute_url())
 	context = {
-		"title": instance.title,  #renders exiting id's title
-		"instance":instance,      #renders exiting id's content
+		"title": instance.title,  #renders existing id's title
+		"instance":instance,      #renders existing id's content
 		"form": form,             #renders actual form information
 	}
 	return render(request, 'post_form.html', context)
