@@ -30,7 +30,7 @@ class Post(models.Model):
 		return self.title
 
 	def get_absolute_url(self):
-		return reverse("posts:detail", kwargs={"id": self.id})
+		return reverse("posts:detail", kwargs={"slug": self.slug})
 		# reverse looks up name ="detail" from the urls.py page
 		# also fills in kew word argument id
 		#return "/posts/%s/" % (self.id)   #define url by function call to db model
@@ -42,13 +42,19 @@ class Post(models.Model):
 		ordering = ["-timestamp", "-updated"]
 		           #order by any piece of the model
 
+def create_slug(instance, new_slug=None):
+	slug = slugify(instance.title)
+	if new_slug is not None:
+		slug = new_slug
+		qs = Post.objects.filter(slug=slug).order_by("id")
+		exists = qs.exists()
+		if exists:
+			new_slug % "%s-%s" %(slug, qs.first().id)
+			return create_slug(instance, new_slug=new_slug)
+		return slug
 
 def pre_save_post_receiver(sender, instance, *args, **kwargs):
-	slug = slugify(instance.title)
-	exists = Post.objects.filter(slug=slug).exists()
-	if exists:
-		slug = "%s-%s" %(slug, instance.id)
-	else:
-		instance.slug = slug
+	if not instance.slug:
+		instance.slug = create_slug(instance)
 
 pre_save.connect(pre_save_post_receiver, sender=Post)
