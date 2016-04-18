@@ -1,5 +1,7 @@
 from django.db import models
 from django.core.urlresolvers import reverse
+from django.db.models.signals import pre_save
+from django.utils.text import slugify
 # Create your models here.
 
 #to save model changes
@@ -11,6 +13,7 @@ def upload_location(instance, filename):
 
 class Post(models.Model):
 	title = models.CharField(max_length=120)  #max_length = 120
+	slug = models.SlugField(unique=True) #must delete old db to make unique entries
 	image = models.ImageField(upload_to = upload_location,
 		null=True, 
 		blank=True, 
@@ -38,3 +41,14 @@ class Post(models.Model):
 
 		ordering = ["-timestamp", "-updated"]
 		           #order by any piece of the model
+
+
+def pre_save_post_receiver(sender, instance, *args, **kwargs):
+	slug = slugify(instance.title)
+	exists = Post.objects.filter(slug=slug).exists()
+	if exists:
+		slug = "%s-%s" %(slug, instance.id)
+	else:
+		instance.slug = slug
+
+pre_save.connect(pre_save_post_receiver, sender=Post)
