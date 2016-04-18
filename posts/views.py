@@ -26,9 +26,9 @@ def posts_create(request):
 	}
 	return render(request, 'post_form.html', context)
 
-def posts_detail(request, id): #retrieve
+def posts_detail(request, slug): #retrieve
 	#instance = Post.objects.get(id=1)
-	instance = get_object_or_404(Post, id = id)
+	instance = get_object_or_404(Post, slug=slug)
 	context = {
 		"title": instance.title,
 		"instance":instance
@@ -61,8 +61,8 @@ def posts_list(request): #list items
 
 
 
-def posts_update(request, id):
-	instance = get_object_or_404(Post, id = id)
+def posts_update(request, slug):
+	instance = get_object_or_404(Post, slug = slug)
 	form = PostForm(request.POST or None, request.FILES or None, instance=instance) #checks for validation redirects what you had
 	if form.is_valid():   #saves the form data into database if valid
 		instance = form.save(commit=False)
