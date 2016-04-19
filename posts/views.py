@@ -1,14 +1,23 @@
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
+
 
 from .models import Post
 from .forms import PostForm
 # Create your views here.
 
+#support functions for Posts app
+def validate_user(request):
+	if not request.user.is_staff or not request.user.is_superuser:
+		raise PermissionDenied
+
+# Actual views for Posts app
 #request comes in send a response
 def posts_create(request):
+	validate_user(request)
 	form = PostForm(request.POST or None, request.FILES or None) #POST request text field data, FILES requests files
 	if form.is_valid():   #saves the form data into database if valid
 		instance = form.save(commit=False)
@@ -62,6 +71,7 @@ def posts_list(request): #list items
 
 
 def posts_update(request, slug):
+	validate_user(request)
 	instance = get_object_or_404(Post, slug = slug)
 	form = PostForm(request.POST or None, request.FILES or None, instance=instance) #checks for validation redirects what you had
 	if form.is_valid():   #saves the form data into database if valid
@@ -77,6 +87,7 @@ def posts_update(request, slug):
 	return render(request, 'post_form.html', context)
 
 def posts_delete(request, id):
+	validate_user(request)
 	instance = get_object_or_404(Post, id = id)
 	instance.delete()
 	messages.success(request, "Succesfully deleted")
