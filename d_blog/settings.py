@@ -37,8 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'posts'
+    'posts',
+    #'disqus'
 ]
+
+DISQUS_API_KEY = 'FOOBARFOOBARFOOBARFOOBARFOOBARF' # change
+DISQUS_WEBSITE_SHORTNAME = 'foobar' #change
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',

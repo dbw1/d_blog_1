@@ -18,9 +18,11 @@ def validate_user(request):
 #request comes in send a response
 def posts_create(request):
 	validate_user(request)
+	
 	form = PostForm(request.POST or None, request.FILES or None) #POST request text field data, FILES requests files
 	if form.is_valid():   #saves the form data into database if valid
 		instance = form.save(commit=False)
+		instance.user = request.user
 		instance.save()
 		messages.success(request, "Post Successfully created")
 		return HttpResponseRedirect(instance.get_absolute_url())
