@@ -7,5 +7,7 @@ class PostForm(forms.ModelForm):  #argument is a form object
 		fields = [
 			"title",
 			"content",
-			"image"
+			"image",
+			"draft",
+			"publish"
 			]

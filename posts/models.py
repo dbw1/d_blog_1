@@ -4,6 +4,8 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.signals import pre_save
 from django.utils.text import slugify
+from datetime import date
+
 # Create your models here.
 
 #to save model changes
@@ -25,6 +27,8 @@ class Post(models.Model):
 	height_field = models.IntegerField(default=0)
 	width_field = models.IntegerField(default=0)
 	content = models.TextField()
+	draft = models.BooleanField(default=False)
+	publish = models.DateField(auto_now=False, auto_now_add=False, default=date.today)
 	timestamp = models.DateTimeField(auto_now=False, auto_now_add=True) #1st time made initially
 	updated = models.DateTimeField(auto_now=True, auto_now_add=False) #everytime it's updated
 	  #auto_now is every time your post is saved in db, updated will be set
