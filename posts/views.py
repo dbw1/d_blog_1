@@ -3,7 +3,7 @@ from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
-
+from django.utils import timezone
 
 from .models import Post
 from .forms import PostForm
@@ -47,7 +47,7 @@ def posts_detail(request, slug): #retrieve
 	return render(request, 'post_detail.html', context)
 
 def posts_list(request): #list items
-	queryset_list = Post.objects.all() #all queries
+	queryset_list = Post.objects.filter(draft=False).filter(publish__lte=timezone.now()) #all queries that are not drafts and published drafts that are less than or equal to today's date (only posts what was meant for today or previous days not hte future)
 	queries_per_page_var = 5
 	paginator = Paginator(queryset_list, queries_per_page_var) # Show 25 contacts per page
 	page_request_var = 'page' #change page search name (see post_list.html)
