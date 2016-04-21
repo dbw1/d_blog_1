@@ -39,6 +39,10 @@ def posts_create(request):
 
 def posts_detail(request, slug): #retrieve
 	#instance = Post.objects.get(id=1)
+	# filter if blog post a draft or not to be published yet, will check if a user or superuser
+	if instance.publish > timezone.now().date() or instance.draft:
+		validate_user(request)
+	
 	instance = get_object_or_404(Post, slug=slug)
 	context = {
 		"title": instance.title,
@@ -47,7 +51,11 @@ def posts_detail(request, slug): #retrieve
 	return render(request, 'post_detail.html', context)
 
 def posts_list(request): #list items
-	queryset_list = Post.objects.all() #all queries that are not drafts and published drafts that are less than or equal to today's date (only posts what was meant for today or previous days not hte future)
+	if request.user.is_staff or request.user.is_superuser:
+		queryset_list = Post.objects.all()
+	else:	
+		queryset_list = Post.objects.active() #all queries that are not drafts and published drafts that are less than or equal to today's date (only posts what was meant for today or previous days not hte future)
+	
 	queries_per_page_var = 5
 	paginator = Paginator(queryset_list, queries_per_page_var) # Show 25 contacts per page
 	page_request_var = 'page' #change page search name (see post_list.html)
