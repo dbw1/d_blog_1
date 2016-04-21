@@ -47,7 +47,7 @@ def posts_detail(request, slug): #retrieve
 	return render(request, 'post_detail.html', context)
 
 def posts_list(request): #list items
-	queryset_list = Post.objects.active() #all queries that are not drafts and published drafts that are less than or equal to today's date (only posts what was meant for today or previous days not hte future)
+	queryset_list = Post.objects.all() #all queries that are not drafts and published drafts that are less than or equal to today's date (only posts what was meant for today or previous days not hte future)
 	queries_per_page_var = 5
 	paginator = Paginator(queryset_list, queries_per_page_var) # Show 25 contacts per page
 	page_request_var = 'page' #change page search name (see post_list.html)

@@ -16,9 +16,14 @@ from datetime import date
 class PostManager(models.Manager):
 	def active(self, *args, **kwargs):
 		return super(PostManager, self).filter(draft=False).filter(publish__lte=timezone.now())
-		# Really dumb way of changing super(PostManager, self).all() = Post.objects.all() because
-		# it directly overwrites Post.objects.all(), CHANGE NAME TO activenow Posts.objects.active() is correct call
-		
+		# By leaving function name as:   def all(self, *args, **kwargs):
+		# Really dumb way of filtering because filtered post_list will get sent to both
+		# views.py -> post_list as well as post_detail
+		# in post_detail, the Post object will only see a list of filtered posts if it calls
+		# Post.objects.all() therefore causing a 404 error to pop up
+		# super(PostManager, self).all() = Post.objects.all() 
+		# it directly overwrites Post.objects.all(), CHANGE NAME TO active now Posts.objects.active() is correct call
+
 
 
 def upload_location(instance, filename):
@@ -37,7 +42,7 @@ class Post(models.Model):
 	width_field = models.IntegerField(default=0)
 	content = models.TextField()
 	draft = models.BooleanField(default=False)
-	publish = models.DateField(auto_now=False, auto_now_add=False, default=date.today)
+	publish = models.DateField(auto_now=False, auto_now_add=False, default=timezone.now)
 	timestamp = models.DateTimeField(auto_now=False, auto_now_add=True) #1st time made initially
 	updated = models.DateTimeField(auto_now=True, auto_now_add=False) #everytime it's updated
 	  #auto_now is every time your post is saved in db, updated will be set
