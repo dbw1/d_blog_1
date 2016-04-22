@@ -2,7 +2,12 @@
 {% block content %}
 
 <div class="col-sm-6 col-sm-offset-1">
-	<h1> {{ title }} </h1>
+	{% if valid_user %}
+		<h1> <span style='color:red;'>Staff View Of {{ title }} </span> </h1>
+	{% else %}
+		<h1> {{ title }} </h1>
+	{% endif %}
+	
 
 	{% for obj in object_list %}
 	
@@ -13,6 +18,14 @@
       			<img src='{{ obj.image.url }}' class='img-responsive' />
       			{% endif %}
       			<div class="caption">
+        		{%if obj.draft %}
+        		<h3><span style='color:red;'>DRAFT</span>
+        		</h3>
+        		{% endif %}
+        		{% if obj.publish > today %}
+        		<h3> <span style='color:green;'>FUTURE POST</span>
+        		</h3>
+        		{% endif %}
         		<h3>
         			<a href='{{ obj.get_absolute_url }}'>{{ obj.title }}</a>
         			<small>{{ obj.publish }} </small>

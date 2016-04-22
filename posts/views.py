@@ -53,9 +53,11 @@ def posts_detail(request, slug): #retrieve
 def posts_list(request): #list items
 	if request.user.is_staff or request.user.is_superuser:
 		queryset_list = Post.objects.all()
+		valid_user = True
 	else:	
 		queryset_list = Post.objects.active() #all queries that are not drafts and published drafts that are less than or equal to today's date (only posts what was meant for today or previous days not hte future)
-	
+		valid_user = False	
+	today = timezone.now().date()
 	queries_per_page_var = 5
 	paginator = Paginator(queryset_list, queries_per_page_var) # Show 25 contacts per page
 	page_request_var = 'page' #change page search name (see post_list.html)
@@ -72,7 +74,9 @@ def posts_list(request): #list items
 	context = {
 		"object_list": queryset,  #add queryset to post list we can see
 		"title": "List",
-		"page_request_var": page_request_var
+		"page_request_var": page_request_var,
+		"today": today,
+		"valid_user": valid_user,
 	}
 
 	return render(request, 'post_list.html', context)
