@@ -4,6 +4,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
+from django.db.models import Q
 
 from .models import Post
 from .forms import PostForm
@@ -40,10 +41,10 @@ def posts_create(request):
 def posts_detail(request, slug): #retrieve
 	#instance = Post.objects.get(id=1)
 	# filter if blog post a draft or not to be published yet, will check if a user or superuser
+	instance = get_object_or_404(Post, slug=slug)
 	if instance.publish > timezone.now().date() or instance.draft:
 		validate_user(request)
-	
-	instance = get_object_or_404(Post, slug=slug)
+
 	context = {
 		"title": instance.title,
 		"instance":instance
@@ -57,8 +58,18 @@ def posts_list(request): #list items
 	else:	
 		queryset_list = Post.objects.active() #all queries that are not drafts and published drafts that are less than or equal to today's date (only posts what was meant for today or previous days not hte future)
 		valid_user = False	
+	
+	search_query = request.GET.get("q")
+	if search_query:
+		queryset_list = queryset_list.filter(
+						Q(title__icontains = search_query) |
+						Q(content__icontains = search_query) |
+						Q(user__first_name__icontains = search_query) |
+						Q(user__last_name__icontains = search_query) 
+						).distinct()
+
 	today = timezone.now().date()
-	queries_per_page_var = 5
+	queries_per_page_var = 2
 	paginator = Paginator(queryset_list, queries_per_page_var) # Show 25 contacts per page
 	page_request_var = 'page' #change page search name (see post_list.html)
 	page = request.GET.get(page_request_var)
